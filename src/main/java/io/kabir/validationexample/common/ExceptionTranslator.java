@@ -3,12 +3,14 @@ package io.kabir.validationexample.common;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
@@ -42,6 +44,13 @@ public class ExceptionTranslator {
         log.error("Error response from server: {}", ex.getMessage());
         String message = new ArrayList<>(ex.getConstraintViolations()).get(0).getMessageTemplate();
         return getErrorResponseResponseEntity(HttpStatus.BAD_REQUEST, ErrorCode.BAD_REQUEST, message);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        log.error("Error response from server: {}", ex.getMessage());
+
+        return getErrorResponseResponseEntity(HttpStatus.BAD_REQUEST, ErrorCode.BAD_REQUEST, "Bad Date Format");
     }
 
 

@@ -70,4 +70,16 @@ class HomeResourceTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("Should throw BadRequest when periodStart is not valid")
+    void getConsents_BadRequest_PeriodStart_Bad() throws Exception{
+        mockMvc.perform(get("/{tenantId}/grants","Unicorn")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("include", "Pending")
+                .param("periodStart", "2021-03-45")
+                .param("scope", "bank:detail:read"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
 }

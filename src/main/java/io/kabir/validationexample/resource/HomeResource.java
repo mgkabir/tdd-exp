@@ -2,6 +2,7 @@ package io.kabir.validationexample.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.time.LocalDate;
 
 @RestController
 @Validated
@@ -24,9 +26,9 @@ public class HomeResource {
 
     @GetMapping("/{tenantId}/grants")
     public String getConsents(@PathVariable String tenantId,
-                                       @RequestParam(value = "include", required = true) String include,
-                                       @RequestParam(value = "periodStart", required = false) String periodStart,
-                                       @RequestParam(value = "scope", required = false) String scope) {
+                              @RequestParam(value = "include", required = true) String include,
+                              @RequestParam(value = "periodStart", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate periodStart,
+                              @RequestParam(value = "scope", required = false) String scope) {
         log.info("Logger Message => tenantId: {}, Include: {}, PeriodStart: {}, Scope: {}", tenantId, include, periodStart, scope);
         return "";
     }
